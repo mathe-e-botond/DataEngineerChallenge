@@ -1,6 +1,6 @@
 package com.mathebotond.wla.io
 
-import com.mathebotond.wla.model.UserAccess
+import com.mathebotond.wla.model.SingleAccess
 import org.apache.spark.sql.expressions.UserDefinedFunction
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.{DataFrame, Dataset, Encoder, SparkSession}
@@ -36,7 +36,7 @@ class Input(spark: SparkSession) {
       .as[T]
   }
 
-  def readAndParse(input: String): Dataset[UserAccess] = parse[UserAccess](
+  def readAndParse(input: String): Dataset[SingleAccess] = parse[SingleAccess](
     readCsv(input)
   )
 }
