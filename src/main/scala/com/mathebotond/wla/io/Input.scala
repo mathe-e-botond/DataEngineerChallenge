@@ -1,12 +1,10 @@
 package com.mathebotond.wla.io
 
-import com.mathebotond.wla.model.UserAccess
 import org.apache.spark.sql.expressions.UserDefinedFunction
 import org.apache.spark.sql.functions._
-import org.apache.spark.sql.{DataFrame, Dataset, Encoder, SparkSession}
+import org.apache.spark.sql.{DataFrame, SparkSession}
 
 class Input(spark: SparkSession) {
-  import spark.implicits._
 
   def readCsv(location: String): DataFrame = {
     val old_columns = Seq("_c0", "_c2", "_c11")
@@ -29,14 +27,9 @@ class Input(spark: SparkSession) {
     noQuery
   })
 
-  def parse[T: Encoder](dataFrame: DataFrame): Dataset[T] = {
-    dataFrame.withColumn("timestamp", to_date(col("timestamp")))
+  def parse(dataFrame: DataFrame): DataFrame = {
+    dataFrame.withColumn("timestamp", unix_timestamp(to_timestamp(col("timestamp"))))
       .withColumn("ip", split(col("ip"), ":").getItem(0))
       .withColumn("endpoint", cleanUrl(col("endpoint")))
-      .as[T]
   }
-
-  def readAndParse(input: String): Dataset[UserAccess] = parse[UserAccess](
-    readCsv(input)
-  )
 }

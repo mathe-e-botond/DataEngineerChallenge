@@ -1,4 +1,5 @@
-package com.mathebotond.wla.test
+package com.mathebotond.wla
+
 import java.io.File
 import java.nio.file.{Path, Paths}
 
