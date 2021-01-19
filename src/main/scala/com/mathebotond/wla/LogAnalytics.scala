@@ -51,7 +51,8 @@ object LogAnalytics extends SparkJob {
     output.save("sessions", sessions, compress = true)
     output.save("average-duration", sessions.select(mean(sessions("duration"))))
     output.save("most-engaged", sessions.groupBy("ip").agg(
-      sum(col("duration")) as "totalDuration"
+      sum(col("duration")) as "totalDuration",
+      count(col("session")) as "numberOfSessions"
     ).orderBy(col("totalDuration").desc).limit(10))
   }
 }
